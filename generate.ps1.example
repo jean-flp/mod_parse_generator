@@ -1,0 +1,20 @@
+# Caminho do ANTLR (ajuste se necessário)
+$antlrJar = ".\mod_parse_generator\antlr-4.13.2-complete.jar"
+
+# Arquivo .g4 (ajuste se sua gramática tiver outro nome)
+$grammar = "AntlrCSharp/ggo.g4"
+
+# Pasta onde os .cs gerados ficarão
+$outDir = "Generated"
+
+# Garantir que a pasta existe
+if (!(Test-Path $outDir)) {
+    New-Item -ItemType Directory -Path $outDir | Out-Null
+}
+
+Write-Host "Gerando código C# a partir da gramática..." -ForegroundColor Cyan
+
+# Comando ANTLR
+java -jar $antlrJar -Dlanguage=CSharp $grammar -o $outDir
+
+Write-Host "Concluído!" -ForegroundColor Green

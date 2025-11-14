@@ -476,7 +476,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Custom project ignores
-.antlr/
-src/bin/
-src/obj/
+#Arquivos especificos
+
+Generated/
+generate.ps1
