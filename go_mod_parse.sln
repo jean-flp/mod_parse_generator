@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntlrCSharp", "AntlrCSharp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntlrCSharpTests", "AntlrCSharpTests\AntlrCSharpTests.csproj", "{4B66065F-0988-4B26-BB2B-92BBBF48B1CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generated", "Generated\Generated.csproj", "{1E685E96-6309-426A-A179-C97B9DA14C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{4B66065F-0988-4B26-BB2B-92BBBF48B1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B66065F-0988-4B26-BB2B-92BBBF48B1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B66065F-0988-4B26-BB2B-92BBBF48B1CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E685E96-6309-426A-A179-C97B9DA14C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E685E96-6309-426A-A179-C97B9DA14C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E685E96-6309-426A-A179-C97B9DA14C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E685E96-6309-426A-A179-C97B9DA14C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

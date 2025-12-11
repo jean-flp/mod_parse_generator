@@ -15,6 +15,6 @@ if (!(Test-Path $outDir)) {
 Write-Host "Gerando código C# a partir da gramática..." -ForegroundColor Cyan
 
 # Comando ANTLR
-java -jar $antlrJar -Dlanguage=CSharp $grammar -o $outDir
+java -jar $antlrJar -Dlanguage=CSharp -visitor $grammar -o $outDir
 
 Write-Host "Concluído!" -ForegroundColor Green
