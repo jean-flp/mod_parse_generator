@@ -13,7 +13,7 @@ public class GoSemanticVisitor : ggoBaseVisitor<object>
     public override object VisitMove_decl(ggoParser.Move_declContext context)
     {
         Pecas jogadorAtual =
-            context.JOGADOR().GetText() == "B" ? Pecas.Black : Pecas.White;
+            context.JOGADOR().GetText() == "P" ? Pecas.Black : Pecas.White;
 
         if (jogadorAtual == ultimoJogador)
             throw new Exception($"Jogador {jogadorAtual} jogou fora da vez!");

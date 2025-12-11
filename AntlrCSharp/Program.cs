@@ -1,12 +1,37 @@
 using Antlr4.Runtime;
 using System;
+using System.IO;
 
 class Program
 {
     static void Main(string[] args)
     {
         // Entrada – você pode trocar por File.ReadAllText("arquivo.go")
-        string input = "B|D4//P|Q16//B|PASSA//P|F3//";
+        if (args.Length == 0)
+        {
+            Console.WriteLine("Usage: program <file.go>");
+            return;
+        }
+
+        string filePath =   args[1];
+        string input;
+
+         if (!File.Exists(filePath))
+        {
+            Console.WriteLine($"File not found: {filePath}");
+            return;
+        }
+
+        try
+        {
+            input = File.ReadAllText(filePath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            return;
+        }
+        // "B|D4//P|Q16//B|PASSA//P|F3//";
 
         AntlrInputStream stream = new AntlrInputStream(input);
 
