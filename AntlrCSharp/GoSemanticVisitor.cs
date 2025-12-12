@@ -1,41 +1,71 @@
-//using Antlr4.Runtime;
-
+using System;
 using Generated;
 using AntlrCSharp.TabuleiroGo;
 
 public class GoSemanticVisitor : ggoBaseVisitor<object>
 {
-    private TabuleiroGo Tabuleiro = new TabuleiroGo(19);
+    private readonly TabuleiroGo Tabuleiro = new TabuleiroGo(19);
+
+    // Último jogador que jogou – começa como White para Preto jogar primeiro
     private Pecas ultimoJogador = Pecas.White;
 
-    private int ColumnToIndex(string c) => c[0] - 'A';
+    // Converte 'A' → 0, 'B' → 1 ...
+    private int ColumnToIndex(string c)
+    {
+        if (string.IsNullOrEmpty(c))
+            throw new ArgumentException("Coluna vazia");
+
+        char letra = char.ToUpperInvariant(c[0]);
+
+        if (letra < 'A' || letra > 'T')
+            throw new Exception($"Coluna inválida: {letra}");
+
+        return letra - 'A';
+    }
 
     public override object VisitMove_decl(ggoParser.Move_declContext context)
     {
-        Pecas jogadorAtual =
-            context.JOGADOR().GetText() == "P" ? Pecas.Black : Pecas.White;
+        // Determina jogador a partir do token (ajuste conforme o texto exato gerado pelo lexer)
+        var jogadorText = context.JOGADOR().GetText();
+        Pecas jogadorAtual = jogadorText == "Preto" ? Pecas.Black : Pecas.White;
 
+        // Valida turno (entrada já especifica jogador)
         if (jogadorAtual == ultimoJogador)
             throw new Exception($"Jogador {jogadorAtual} jogou fora da vez!");
 
         ultimoJogador = jogadorAtual;
 
-        if (context.pos().GetText() == "PASSA")
+        // PASSA (token PASSA na gramática)
+        if (context.pos().GetText().Equals("PASSA", StringComparison.OrdinalIgnoreCase))
+        {
+            // usa API do tabuleiro para passar
+            Tabuleiro.PlayPass(jogadorAtual);
+            Tabuleiro.PrintBoard();
             return null;
+        }
 
-        string col = context.pos().LETRA().GetText();
+        // Lê coluna e linha
+        string colText = context.pos().LETRA().GetText();
         int row = int.Parse(context.pos().LINHA().GetText());
 
-        int x = ColumnToIndex(col);
+        int x = ColumnToIndex(colText);
         int y = row - 1;
 
+        // Valida limites
         if (!Tabuleiro.IsInside(x, y))
-            throw new Exception($"Posição {col}{row} está fora do tabuleiro!");
+            throw new Exception($"Posição {colText}{row} está fora do tabuleiro!");
 
-        if (Tabuleiro.GetPosition(x, y) != Pecas.Empty)
-            throw new Exception($"Posição {col}{row} já está ocupada!");
+        try
+        {
+            Tabuleiro.PlayMove(x, y, jogadorAtual);
+        }
+        catch (Exception ex)
+        {
+            // Enriquecer a exceção com contexto (mantendo a inner exception)
+            throw new Exception($"Erro aplicando jogada {jogadorText}|{colText}{row}: {ex.Message}", ex);
+        }
 
-        Tabuleiro.SetPosition(x, y, jogadorAtual);
+        // Mostra tabuleiro após a jogada
         Tabuleiro.PrintBoard();
 
         return null;

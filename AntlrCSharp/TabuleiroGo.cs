@@ -261,7 +261,6 @@ namespace AntlrCSharp.TabuleiroGo
 
             for (int y = 0; y < Tamanho; y++)
             {
-                // Número da linha alinhado à direita (até 2 dígitos para 19)
                 Console.Write($"{y + 1,2} ");
                 for (int x = 0; x < Tamanho; x++)
                 {
@@ -298,7 +297,6 @@ namespace AntlrCSharp.TabuleiroGo
             for (int x = 0; x < Tamanho; x++)
                 for (int y = 0; y < Tamanho; y++)
                     Celulas[x, y] = snapshot[x, y];
-            // restaura também último hash (recalcula)
             ultimoHash = BoardHash();
         }
 
