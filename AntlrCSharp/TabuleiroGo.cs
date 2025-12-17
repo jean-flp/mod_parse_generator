@@ -18,10 +18,6 @@ namespace AntlrCSharp.TabuleiroGo
         // Último hash (estado atual) — mantido atualizado
         private string ultimoHash;
 
-        // Se true, impede qualquer repetição de estado (superko). Se false, ainda evita repetições exatas mas
-        // normalmente a checagem é equivalente (manter true é razoável).
-        public bool EnforceSuperKo { get; set; } = true;
-
         public TabuleiroGo(int tamanho = 19)
         {
             if (tamanho <= 0) throw new ArgumentException("Tamanho do tabuleiro deve ser positivo");
@@ -244,7 +240,10 @@ namespace AntlrCSharp.TabuleiroGo
         // Converte índice de coluna (0-based) para letra (A, B, C, ...)
         private string IndexToColumn(int x)
         {
-            return ((char)('A' + x)).ToString();
+            char c = (char)('A' + x);
+            if (c >= 'I')
+                c++; // pula o I
+            return c.ToString();
         }
 
         // Imprime o tabuleiro no terminal (ASCII), 1..Tamanho nas linhas e A.. nas colunas
@@ -255,7 +254,10 @@ namespace AntlrCSharp.TabuleiroGo
             Console.Write("   ");
             for (int x = 0; x < Tamanho; x++)
             {
-                Console.Write($"{(char)('A' + x)} ");
+                char c = (char)('A' + x);
+                if (c >= 'I')
+                    c++;
+                Console.Write($"{c} ");
             }
             Console.WriteLine();
 
@@ -267,8 +269,8 @@ namespace AntlrCSharp.TabuleiroGo
                     var p = GetPosition(x, y);
                     char c = p switch
                     {
-                        Pecas.Black => '●',   // pedra preta
-                        Pecas.White => '○',   // pedra branca
+                        Pecas.White => '●',   // pedra branca
+                        Pecas.Black => '○',   // pedra preta
                         _ => '+'
                     };
                     Console.Write(c);
@@ -300,6 +302,52 @@ namespace AntlrCSharp.TabuleiroGo
             ultimoHash = BoardHash();
         }
 
+        #endregion
+        #region Contagem Final de Pontos
+        // Método de contagem final das liberdades de cada jogador com a diferença do padrão da contagem do jogo real.
+        public (int blackPoints, int whitePoints) CountFinalPoints()
+        {
+            var visited = new bool[Tamanho, Tamanho];
+
+            var blackLiberties = new HashSet<(int x, int y)>();
+            var whiteLiberties = new HashSet<(int x, int y)>();
+
+            for (int x = 0; x < Tamanho; x++)
+            {
+                for (int y = 0; y < Tamanho; y++)
+                {
+                    if (visited[x, y])
+                        continue;
+
+                    var p = GetPosition(x, y);
+                    if (p == Pecas.Empty)
+                        continue;
+
+                    var group = GetGroup(x, y);
+
+                    // marca grupo como visitado
+                    foreach (var (gx, gy) in group)
+                        visited[gx, gy] = true;
+
+                    // coleta liberdades do grupo
+                    foreach (var (gx, gy) in group)
+                    {
+                        foreach (var (nx, ny) in Neighbors(gx, gy))
+                        {
+                            if (!IsInside(nx, ny)) continue;
+                            if (GetPosition(nx, ny) != Pecas.Empty) continue;
+
+                            if (p == Pecas.Black)
+                                blackLiberties.Add((nx, ny));
+                            else if (p == Pecas.White)
+                                whiteLiberties.Add((nx, ny));
+                        }
+                    }
+                }
+            }
+
+            return (blackLiberties.Count, whiteLiberties.Count);
+        }
         #endregion
     }
 }

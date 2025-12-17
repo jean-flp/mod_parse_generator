@@ -1,0 +1,9 @@
+Preto|D4/
+Branco|D3/
+Preto|C4/
+Branco|D5/
+Preto|E4/
+Branco|C3/
+Preto|E5/
+Branco|C5/
+Preto|C4

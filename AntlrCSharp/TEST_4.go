@@ -1,0 +1,11 @@
+Preto|D4/
+Branco|E4/
+Preto|D6/
+Branco|F5/
+Preto|E5/
+Branco|B1/
+Preto|C5/
+Branco|E6/
+Preto|A1/
+Branco|D5/
+Preto|E5

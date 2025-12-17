@@ -12,8 +12,7 @@ class Program
             Console.WriteLine("Usage: program <file.go>");
             return;
         }
-
-        string filePath =   args[1];
+        string filePath = args[1];
         string input;
 
          if (!File.Exists(filePath))

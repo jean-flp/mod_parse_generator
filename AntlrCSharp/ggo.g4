@@ -11,11 +11,9 @@ pos       : LETRA LINHA
 
 //tokens
 JOGADOR   : 'Branco' | 'Preto' ;
-LETRA     : [A-T] ;
+LETRA     : [A-HJ-T];
 LINHA     : ([1-9]|'1'[0-9]);
 
 SEP : '/' ;
 NEWLINE: [\r\n]+ -> skip;
 WS     : [ \t]+ -> skip ;
-
-//BOARD_SIZE : '9' | '13' | '19';
